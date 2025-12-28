@@ -10,13 +10,11 @@ import CharacterLibrary from './CharacterLibrary';
 import PanelTemplateManager from './PanelTemplateManager';
 import CSVUploader from './CSVUploader';
 import GenerationProgress from './GenerationProgress';
-import TemplateDebugger from './TemplateDebugger';
 import './AdvancedComicGenerator.css';
 
 function AdvancedComicGenerator() {
   const [apiKey, setApiKey] = useState('');
   const [generationMode, setGenerationMode] = useState<GenerationMode>('csv');
-  const [showDebugger, setShowDebugger] = useState(true);
 
   // キャラクターライブラリ
   const [characters, setCharacters] = useState<CharacterImage[]>([]);
@@ -328,33 +326,6 @@ function AdvancedComicGenerator() {
         onRemoveTemplate={handleRemoveTemplate}
         disabled={isGenerating}
       />
-
-      {/* デバッグ情報 */}
-      {showDebugger && (
-        <div className="section">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-            <h2>🐛 デバッグ情報</h2>
-            <button
-              onClick={() => setShowDebugger(false)}
-              style={{
-                background: '#374151',
-                color: '#9ca3af',
-                border: 'none',
-                borderRadius: '4px',
-                padding: '0.5rem 1rem',
-                cursor: 'pointer',
-                fontSize: '0.875rem'
-              }}
-            >
-              非表示
-            </button>
-          </div>
-          <TemplateDebugger
-            templates={panelTemplates}
-            csvTemplateNames={generationTasks.map(t => t.templateName)}
-          />
-        </div>
-      )}
 
       {/* 生成モード選択 */}
       <div className="mode-section">
