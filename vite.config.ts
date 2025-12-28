@@ -15,6 +15,7 @@ export default defineConfig({
         manualChunks: {
           'react-vendor': ['react', 'react-dom'],
           'google-ai': ['@google/generative-ai'],
+          'firebase': ['firebase/app', 'firebase/auth', 'firebase/firestore'],
         },
       },
     },

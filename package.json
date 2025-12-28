@@ -25,6 +25,7 @@
   "license": "MIT",
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
+    "firebase": "^12.7.0",
     "jszip": "^3.10.1",
     "papaparse": "^5.5.3",
     "react": "^19.2.0",

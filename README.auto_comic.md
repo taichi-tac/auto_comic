@@ -6,6 +6,16 @@ Nano Banana Pro API (Gemini 3 Pro Image) を使用したAI漫画生成アプリ�
 
 このアプリは[コミクル3.0 Pro](https://service-3-0-51080207511.us-west1.run.app/)を参考に、Nano Banana Pro APIを使って同様の機能を提供します。
 
+### 🔐 認証システム
+
+**Google認証とユーザー承認機能を実装済み**：
+- Googleアカウントでログイン
+- 新規ユーザーは管理者の承認待ち
+- 管理者ページでユーザー承認/拒否
+- 承認されたユーザーのみアプリを利用可能
+
+詳細は [FIREBASE_SETUP.md](./FIREBASE_SETUP.md) を参照してください。
+
 ## 主な機能
 
 ### シンプルモード
