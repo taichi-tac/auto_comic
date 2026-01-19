@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { getAllUsers, approveUser, rejectUser } from '../services/userService';
+import { getAllUsers, approveUser, rejectUser, resetUserToPending, approveRejectedUser } from '../services/userService';
 import { User } from '../types/user';
 
 function AdminPage() {
@@ -50,6 +50,36 @@ function AdminPage() {
       await loadUsers();
     } catch (err: any) {
       setError(err.message || '拒否に失敗しました');
+    }
+  };
+
+  const handleResetToPending = async (uid: string) => {
+    if (!currentUser?.email) return;
+
+    if (!confirm('このユーザーを承認待ちに戻しますか？')) {
+      return;
+    }
+
+    try {
+      await resetUserToPending(uid);
+      await loadUsers();
+    } catch (err: any) {
+      setError(err.message || '承認待ちへの変更に失敗しました');
+    }
+  };
+
+  const handleApproveRejected = async (uid: string) => {
+    if (!currentUser?.email) return;
+
+    if (!confirm('拒否済みユーザーを承認しますか？')) {
+      return;
+    }
+
+    try {
+      await approveRejectedUser(uid, currentUser.email);
+      await loadUsers();
+    } catch (err: any) {
+      setError(err.message || '承認に失敗しました');
     }
   };
 
@@ -345,9 +375,45 @@ function AdminPage() {
                         承認者: {user.approvedBy}
                       </div>
                     )}
-                    {user.status === 'rejected' && user.rejectedBy && (
-                      <div style={{ color: '#64748b', fontSize: '0.75rem' }}>
-                        拒否者: {user.rejectedBy}
+                    {user.status === 'rejected' && (
+                      <div>
+                        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end', marginBottom: '0.5rem' }}>
+                          <button
+                            onClick={() => handleApproveRejected(user.uid)}
+                            style={{
+                              padding: '0.5rem 1rem',
+                              background: '#059669',
+                              color: '#fff',
+                              border: 'none',
+                              borderRadius: '0.375rem',
+                              cursor: 'pointer',
+                              fontSize: '0.875rem',
+                              fontWeight: '600',
+                            }}
+                          >
+                            承認
+                          </button>
+                          <button
+                            onClick={() => handleResetToPending(user.uid)}
+                            style={{
+                              padding: '0.5rem 1rem',
+                              background: '#f59e0b',
+                              color: '#fff',
+                              border: 'none',
+                              borderRadius: '0.375rem',
+                              cursor: 'pointer',
+                              fontSize: '0.875rem',
+                              fontWeight: '600',
+                            }}
+                          >
+                            承認待ちに戻す
+                          </button>
+                        </div>
+                        {user.rejectedBy && (
+                          <div style={{ color: '#64748b', fontSize: '0.75rem' }}>
+                            拒否者: {user.rejectedBy}
+                          </div>
+                        )}
                       </div>
                     )}
                   </td>

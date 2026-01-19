@@ -116,6 +116,40 @@ export async function rejectUser(uid: string, rejectedBy: string): Promise<void>
 }
 
 /**
+ * 拒否済みユーザーを承認待ちに戻す
+ */
+export async function resetUserToPending(uid: string): Promise<void> {
+  try {
+    await updateDoc(doc(db, USERS_COLLECTION, uid), {
+      status: 'pending',
+      rejectedAt: null,
+      rejectedBy: null,
+    });
+  } catch (error) {
+    console.error('Error resetting user to pending:', error);
+    throw error;
+  }
+}
+
+/**
+ * 拒否済みユーザーを直接承認する
+ */
+export async function approveRejectedUser(uid: string, approvedBy: string): Promise<void> {
+  try {
+    await updateDoc(doc(db, USERS_COLLECTION, uid), {
+      status: 'approved',
+      approvedAt: serverTimestamp(),
+      approvedBy,
+      rejectedAt: null,
+      rejectedBy: null,
+    });
+  } catch (error) {
+    console.error('Error approving rejected user:', error);
+    throw error;
+  }
+}
+
+/**
  * すべてのユーザーを取得（管理者用）
  */
 export async function getAllUsers(): Promise<User[]> {
